@@ -82,6 +82,6 @@ object Term {
   def one[@spec(Float, Double) C](implicit r: Rig[C]): Term[C] = 
     Term(r.one, 0)
 
-  private val IsZero = "0".r
-  private val IsNegative = "-(.*)".r
+  val IsZero = "0".r
+  val IsNegative = "-(.*)".r
 }

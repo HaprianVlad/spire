@@ -85,7 +85,9 @@ object DataSet {
   def fromResource[CC[_], @spec(Double) F, @spec(Double) K](name: String, res: String, sep: Char,
       variables: List[Variable[F]], out: Output[K])(
       cs: Int => CoordinateSpace[CC[F], F])(implicit
-      cbf: CanBuildFrom[Nothing, F, CC[F]]): DataSet[CC[F], F, K] = {
+      cbf: CanBuildFrom[Nothing, F, CC[F]]): DataSet[CC[F], F, K] = ???
+/*
+  {
 
     val lines = readDataSet(res)
     val (dimensions, data) = fromLines(lines map (_.split(sep).toList), variables, out)(cbf)
@@ -93,6 +95,7 @@ object DataSet {
 
     new DataSet[CC[F], F, K](name, variables, space, data)
   }
+*/
 
   import Variable._
 

@@ -50,7 +50,9 @@ object MyBuild extends Build {
   override lazy val settings = super.settings ++ Seq(
     organization := "org.spire-math",
 
-    scalaVersion := "2.10.2",
+    // hacky compiler injection
+    scalaVersion := "2.10.3",
+    // resolvers += Resolver.mavenLocal,
 
     // disable annoying warnings about 2.10.x
     conflictWarning in ThisBuild := ConflictWarning.disable,
@@ -64,18 +66,26 @@ object MyBuild extends Build {
 
     scalacOptions ++= Seq(
       //"-no-specialization", // use this to build non-specialized jars
-      "-Yinline-warnings",
+      //"-Yinline-warnings",
       "-deprecation",
       "-unchecked",
-      "-optimize",
+      //"-optimize",
       "-language:experimental.macros",
       "-language:higherKinds",
       "-language:implicitConversions",
       "-feature"
     ),
 
+    // miniboxing plugin
     resolvers += Resolver.sonatypeRepo("snapshots"),
-    addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.2" % "2.0.0-SNAPSHOT"),
+    libraryDependencies += "org.scala-miniboxing.plugins" %% "miniboxing-runtime" % "0.1-SNAPSHOT",
+    addCompilerPlugin("org.scala-miniboxing.plugins" %% "miniboxing-plugin" % "0.1-SNAPSHOT"),
+    scalacOptions += "-P:minibox:hijack",
+
+    // macro paradise plugin
+    resolvers += Resolver.sonatypeRepo("snapshots"),
+    addCompilerPlugin("org.scalamacros" %% "paradise" % "2.0.0-SNAPSHOT" cross CrossVersion.full),
+    libraryDependencies += "org.scalamacros" %% "quasiquotes" % "2.0.0-SNAPSHOT" cross CrossVersion.full,
 
     publishMavenStyle := true,
     publishArtifact in Test := false,

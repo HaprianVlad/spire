@@ -81,6 +81,8 @@ trait Dist[@spec A] { self =>
   }
 
   def repeat[CC[A] <: Seq[A]](n: Int)(implicit cbf: CanBuildFrom[Nothing, A, CC[A]]): Dist[CC[A]] =
+    ???
+/*
     new Dist[CC[A]] {
       def apply(gen: mutable.Generator): CC[A] = {
         val builder = cbf()
@@ -93,7 +95,7 @@ trait Dist[@spec A] { self =>
         builder.result()
       }
     }
-
+*/
   def iterate(n: Int, f: A => Dist[A]): Dist[A] =
     if (n == 0) this else flatMap(f).iterate(n - 1 ,f)
 

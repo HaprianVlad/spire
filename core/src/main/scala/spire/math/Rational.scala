@@ -413,7 +413,7 @@ object Rational extends RationalInstances {
 
 
 
-private[math] abstract class Rationals[@specialized(Long) A](implicit integral: Integral[A]) {
+private[math] abstract class Rationals[@specialized(Long) A](implicit val integral: Integral[A]) {
   import LongRationals._
   import BigRationals._
   import integral._

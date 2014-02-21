@@ -155,14 +155,14 @@ case class PolySparse[@spec(Double) C] private [spire] (val exp: Array[Int], val
 
 
 object PolySparse {
-  private final def dense2sparse[@spec(Double) C: Semiring: Eq: ClassTag](poly: PolyDense[C]): PolySparse[C] = {
+  final def dense2sparse[@spec(Double) C: Semiring: Eq: ClassTag](poly: PolyDense[C]): PolySparse[C] = {
     val cs = poly.coeffs
     val es = new Array[Int](cs.length)
     cfor(0)(_ < es.length, _ + 1) { i => es(i) = i }
     PolySparse.safe(es, cs)
   }
 
-  private[math] final def safe[@spec(Double) C: Semiring: Eq: ClassTag]
+  final def safe[@spec(Double) C: Semiring: Eq: ClassTag]
       (exp: Array[Int], coeff: Array[C]): PolySparse[C] = {
     var len = 0
     cfor(0)(_ < coeff.length, _ + 1) { i =>
@@ -229,7 +229,7 @@ object PolySparse {
   final def zero[@spec(Double) C: Semiring: Eq: ClassTag]: PolySparse[C] =
     new PolySparse(new Array[Int](0), new Array[C](0))
 
-  private final def multiplyTerm[@spec(Double) C: Semiring: Eq: ClassTag](poly: PolySparse[C], c: C, e: Int): PolySparse[C] = {
+  final def multiplyTerm[@spec(Double) C: Semiring: Eq: ClassTag](poly: PolySparse[C], c: C, e: Int): PolySparse[C] = {
     val exp = poly.exp
     val coeff = poly.coeff
     val cs = new Array[C](coeff.length)
@@ -241,7 +241,7 @@ object PolySparse {
     new PolySparse(es, cs)
   }
 
-  private final def multiplySparse[@spec(Double) C: Semiring: Eq: ClassTag]
+  final def multiplySparse[@spec(Double) C: Semiring: Eq: ClassTag]
       (lhs: PolySparse[C], rhs: PolySparse[C]): PolySparse[C] = {
     val lexp = lhs.exp
     val lcoeff = lhs.coeff
@@ -252,7 +252,7 @@ object PolySparse {
     sum
   }
 
-  private final def countSumTerms[@spec(Double) C]
+  final def countSumTerms[@spec(Double) C]
       (lhs: PolySparse[C], rhs: PolySparse[C], lOffset: Int = 0, rOffset: Int = 0): Int = {
     val PolySparse(lexp, lcoeff) = lhs
     val PolySparse(rexp, rcoeff) = rhs
@@ -271,7 +271,7 @@ object PolySparse {
     loop(0, 0, 0)
   }
 
-  private final def addSparse[C: Eq: Semiring: ClassTag](lhs: PolySparse[C], rhs: PolySparse[C]): PolySparse[C] = {
+  final def addSparse[C: Eq: Semiring: ClassTag](lhs: PolySparse[C], rhs: PolySparse[C]): PolySparse[C] = {
     val PolySparse(lexp, lcoeff) = lhs
     val PolySparse(rexp, rcoeff) = rhs
 
@@ -315,7 +315,7 @@ object PolySparse {
     sum(0, 0, 0)
   }
 
-  private final def subtractScaled[C: Eq: Rng: ClassTag]
+  final def subtractScaled[C: Eq: Rng: ClassTag]
       (lhs: PolySparse[C], c: C, e: Int, rhs: PolySparse[C]) = {
     val PolySparse(lexp, lcoeff) = lhs
     val PolySparse(rexp, rcoeff) = rhs
@@ -361,7 +361,7 @@ object PolySparse {
     loop(0, 0, 0)
   }
 
-  private final def quotmodSparse[@spec(Double) C: Field: Eq: ClassTag]
+  final def quotmodSparse[@spec(Double) C: Field: Eq: ClassTag]
       (lhs: PolySparse[C], rhs: PolySparse[C]): (PolySparse[C], PolySparse[C]) = {
     val rdegree = rhs.degree
     val rmaxCoeff = rhs.maxOrderTermCoeff

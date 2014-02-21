@@ -158,7 +158,7 @@ class PolyDense[@spec(Double) C] private[spire] (val coeffs: Array[C])
 }
 
 object PolyDense {
-  private final def plusDense[C: Semiring: Eq: ClassTag](lhs: Polynomial[C], rhs: Polynomial[C]): Polynomial[C] = {
+  final def plusDense[C: Semiring: Eq: ClassTag](lhs: Polynomial[C], rhs: Polynomial[C]): Polynomial[C] = {
     val lcoeffs = lhs.coeffsArray
     val rcoeffs = rhs.coeffsArray
     if (lcoeffs.length < rcoeffs.length) {

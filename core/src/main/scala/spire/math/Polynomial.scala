@@ -116,7 +116,7 @@ object Polynomial extends PolynomialInstances {
     Polynomial(ts.map(t => (t.e, t.c)).toMap)
   }
 
-  private final def split[@spec(Double) C: ClassTag](poly: Polynomial[C]): (Array[Int], Array[C]) = {
+  final def split[@spec(Double) C: ClassTag](poly: Polynomial[C]): (Array[Int], Array[C]) = {
     val es = ArrayBuilder.make[Int]()
     val cs = ArrayBuilder.make[C]()
     poly foreach { (e, c) =>
@@ -253,7 +253,9 @@ trait Polynomial[@spec(Double) C] { lhs =>
   def :* (k: C)(implicit ring: Semiring[C], eq: Eq[C]): Polynomial[C] = k *: lhs
   def :/ (k: C)(implicit field: Field[C], eq: Eq[C]): Polynomial[C] = this :* k.reciprocal
 
-  override def equals(that: Any): Boolean = that match {
+  override def equals(that: Any): Boolean = ???
+/*
+  that match {
     case rhs: Polynomial[_] if lhs.degree == rhs.degree =>
       val (les, lcs) = Polynomial.split(lhs)
       val (res, rcs) = Polynomial.split[Any](rhs.asInstanceOf[Polynomial[Any]])
@@ -288,6 +290,7 @@ trait Polynomial[@spec(Double) C] { lhs =>
     case _ =>
       false
   }
+*/
 
   override def toString =
     if (isZero) {
