@@ -52,8 +52,6 @@ object MyBuild extends Build {
 
     scalaVersion := "2.11.1",
 
-    resolvers += Resolver.sonatypeRepo("snapshots"),
-
     crossScalaVersions := Seq("2.10.2", "2.11.1"),
 
     licenses := Seq("BSD-style" -> url("http://opensource.org/licenses/MIT")),
@@ -138,8 +136,21 @@ object MyBuild extends Build {
 
   // Main
 
-  val minibox = Seq(
-    scalacOptions ++= Seq("-P:minibox:hijack", "-optimize", "-Xplugin:./lib/miniboxing-plugin_2.11-0.3-SNAPSHOT.jar")
+  val miniboxingSettings = Seq(
+    resolvers += Resolver.sonatypeRepo("snapshots"),
+    libraryDependencies += "org.scala-miniboxing.plugins" %% "miniboxing-runtime" % "0.3-SNAPSHOT",
+    addCompilerPlugin("org.scala-miniboxing.plugins" %% "miniboxing-plugin" % "0.3-SNAPSHOT"),
+    scalacOptions ++= (
+      // "-P:minibox:log" ::    // enable the miniboxing plugin output
+      //                        // (which explains what the plugin is doing)
+      "-P:minibox:hijack" :: // enable hijacking the @specialized annotations
+                             // transforming them into @miniboxed annotations
+      "-P:minibox:two-way" ::// translate to {generic, Long, Double} instead of
+                             // just {generic, Long} - further increases performance
+      "-optimize" ::         // necessary to get the best performance when
+                             // using the miniboxing plugin
+      Nil
+    )
   )
 
   lazy val spire = Project("spire", file(".")).
@@ -199,7 +210,7 @@ object MyBuild extends Build {
       scalaCheck % "test",
       scalaTest % "test"
     )
-  ) ++ buildInfoSettings ++ minibox ++ Seq(
+  ) ++ buildInfoSettings ++ miniboxingSettings ++ Seq(
     sourceGenerators in Compile <+= buildInfo,
     buildInfoKeys := Seq[BuildInfoKey](version, scalaVersion),
     buildInfoPackage := "spire"
@@ -218,7 +229,7 @@ object MyBuild extends Build {
       "org.apfloat" % "apfloat" % "1.6.3",
       "org.jscience" % "jscience" % "4.3.1"
     )
-  ) ++ noPublish ++ minibox
+  ) ++ noPublish ++ miniboxingSettings
 
   // Scalacheck binding
 
@@ -232,7 +243,7 @@ object MyBuild extends Build {
       "org.typelevel" %% "discipline" % "0.2.1",
       scalaCheck
     )
-  ) ++ minibox
+  ) ++ miniboxingSettings
 
   // Tests
 
@@ -245,7 +256,7 @@ object MyBuild extends Build {
     libraryDependencies ++= Seq(
       scalaTest % "test"
     )
-  ) ++ noPublish ++ minibox
+  ) ++ noPublish ++ miniboxingSettings
 
 
   // Benchmark
@@ -280,6 +291,6 @@ object MyBuild extends Build {
 
     // enable forking in run
     fork in run := true
-  ) ++ noPublish ++ minibox
+  ) ++ noPublish ++ miniboxingSettings
 
 }

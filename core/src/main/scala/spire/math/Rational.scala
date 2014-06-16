@@ -68,7 +68,7 @@ sealed abstract class Rational extends ScalaNumber with ScalaNumericConversions 
     } else if (!(exp.numerator.isValidInt) || !(exp.denominator.isValidInt)) {
       throw new ArithmeticException("Exponent is too large!")
     } else {
-
+      
       // nroot must be done last so the context is still valid, otherwise, we'd
       // need to adjust the error, as the absolute error would increase,
       // relatively, by (1 + e)^exp.numerator if nroot was done before the pow.
