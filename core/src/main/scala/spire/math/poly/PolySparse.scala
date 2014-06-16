@@ -137,7 +137,7 @@ case class PolySparse[@spec(Double) C] private [spire] (val exp: Array[Int], val
       es(i) = e
       cs(i) = coeff(i) / field.fromInt(e)
     }
-    
+
     PolySparse.safe(es, cs)
   }
 
@@ -264,7 +264,7 @@ object PolySparse {
     new PolySparse(es, cs)
   }
 
-  private final def multiplySparse[@spec(Double) C: Semiring: Eq: ClassTag]
+  final def multiplySparse[@spec(Double) C: Semiring: Eq: ClassTag]
       (lhs: PolySparse[C], rhs: PolySparse[C]): PolySparse[C] = {
     val lexp = lhs.exp
     val lcoeff = lhs.coeff
@@ -294,7 +294,7 @@ object PolySparse {
     loop(0, 0, 0)
   }
 
-  private final def addSparse[C: Eq: Semiring: ClassTag](lhs: PolySparse[C], rhs: PolySparse[C]): PolySparse[C] = {
+  final def addSparse[C: Eq: Semiring: ClassTag](lhs: PolySparse[C], rhs: PolySparse[C]): PolySparse[C] = {
     val PolySparse(lexp, lcoeff) = lhs
     val PolySparse(rexp, rcoeff) = rhs
 
@@ -384,7 +384,7 @@ object PolySparse {
     loop(0, 0, 0)
   }
 
-  private final def quotmodSparse[@spec(Double) C: Field: Eq: ClassTag]
+  final def quotmodSparse[@spec(Double) C: Field: Eq: ClassTag]
       (lhs: PolySparse[C], rhs: PolySparse[C]): (PolySparse[C], PolySparse[C]) = {
     val rdegree = rhs.degree
     val rmaxCoeff = rhs.maxOrderTermCoeff

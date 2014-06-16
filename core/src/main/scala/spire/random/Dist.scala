@@ -83,7 +83,7 @@ trait Dist[@spec A] { self =>
   def repeat[CC[A] <: Seq[A]](n: Int)(implicit cbf: CanBuildFrom[Nothing, A, CC[A]]): Dist[CC[A]] =
     new Dist[CC[A]] {
       def apply(gen: mutable.Generator): CC[A] = {
-        val builder = cbf()
+        val builder = (cbf.asInstanceOf[CanBuildFrom[Nothing, A, CC[A]]])()
         builder.sizeHint(n)
         var i = 0
         while (i < n) {

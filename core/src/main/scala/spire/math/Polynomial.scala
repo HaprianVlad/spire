@@ -15,9 +15,9 @@ import spire.syntax.std.seq._
 
 /**
  * Polynomial
- * A univariate polynomial class and EuclideanRing extension trait 
- * for arithmetic operations. Polynomials can be instantiated using 
- * any type C for which a Ring[C] and Signed[C] are in scope, with 
+ * A univariate polynomial class and EuclideanRing extension trait
+ * for arithmetic operations. Polynomials can be instantiated using
+ * any type C for which a Ring[C] and Signed[C] are in scope, with
  * exponents given by Int values. Some operations require a Field[C]
  * to be in scope.
 */
@@ -118,7 +118,7 @@ object Polynomial extends PolynomialInstances {
     Polynomial(ts.map(t => (t.e, t.c)).toMap)
   }
 
-  private final def split[@spec(Double) C: ClassTag](poly: Polynomial[C]): (Array[Int], Array[C]) = {
+  final def split[@spec(Double) C: ClassTag](poly: Polynomial[C]): (Array[Int], Array[C]) = {
     val es = ArrayBuilder.make[Int]()
     val cs = ArrayBuilder.make[C]()
     poly foreach { (e, c) =>

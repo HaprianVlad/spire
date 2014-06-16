@@ -49,30 +49,30 @@ object Orient2 {
   }
 }
 
-object FpFilterBenchmark extends MyRunner(classOf[FpFilterBenchmark])
+// object FpFilterBenchmark extends MyRunner(classOf[FpFilterBenchmark])
 
-class FpFilterBenchmark extends MyBenchmark {
-  @Param(Array("32", "128", "1024"))
-  var size: Int = 0
+// class FpFilterBenchmark extends MyBenchmark {
+//   @Param(Array("32", "128", "1024"))
+//   var size: Int = 0
 
-  var points: Array[Point2] = _
+//   var points: Array[Point2] = _
 
-  override protected def setUp() {
-    points = init(size)(Point2(Random.nextDouble, Random.nextDouble))
-  }
+//   override protected def setUp() {
+//     points = init(size)(Point2(Random.nextDouble, Random.nextDouble))
+//   }
 
-  def findSign(o: Orient2): Int = {
-    val ps = points
-    var i = 2
-    var sign = 0
-    while (i < ps.length) {
-      sign = sign ^ o.orient(ps(i - 2), ps(i - 1), ps(i))
-      i += 1
-    }
-    sign
-  }
+//   def findSign(o: Orient2): Int = {
+//     val ps = points
+//     var i = 2
+//     var sign = 0
+//     while (i < ps.length) {
+//       sign = sign ^ o.orient(ps(i - 2), ps(i - 1), ps(i))
+//       i += 1
+//     }
+//     sign
+//   }
 
-  def timeDouble(reps: Int) = run(reps)(findSign(Orient2.bad))
-  def timeBigDecimal(reps: Int) = run(reps)(findSign(Orient2.slow))
-  def timeFpFilter(reps: Int) = run(reps)(findSign(Orient2.fast))
-}
+//   def timeDouble(reps: Int) = run(reps)(findSign(Orient2.bad))
+//   def timeBigDecimal(reps: Int) = run(reps)(findSign(Orient2.slow))
+//   def timeFpFilter(reps: Int) = run(reps)(findSign(Orient2.fast))
+// }

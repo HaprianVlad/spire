@@ -53,8 +53,6 @@ object MyBuild extends Build {
     scalaVersion := "2.11.1",
 
     resolvers += Resolver.sonatypeRepo("snapshots"),
-    libraryDependencies += "org.scala-miniboxing.plugins" %% 
-                           "miniboxing-runtime" % "0.3-SNAPSHOT",
 
     crossScalaVersions := Seq("2.10.2", "2.11.1"),
 
@@ -64,6 +62,8 @@ object MyBuild extends Build {
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
     ),
+  
+    parallelExecution := false,
 
     scalacOptions ++= Seq(
       //"-no-specialization", // use this to build non-specialized jars
@@ -74,7 +74,8 @@ object MyBuild extends Build {
       "-language:experimental.macros",
       "-language:higherKinds",
       "-language:implicitConversions",
-      "-feature"
+      "-feature",
+      "-Ydebug"
     ),
 
     resolvers += Resolver.sonatypeRepo("snapshots"),

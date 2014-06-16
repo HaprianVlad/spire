@@ -68,7 +68,7 @@ sealed abstract class Rational extends ScalaNumber with ScalaNumericConversions 
     } else if (!(exp.numerator.isValidInt) || !(exp.denominator.isValidInt)) {
       throw new ArithmeticException("Exponent is too large!")
     } else {
-      
+
       // nroot must be done last so the context is still valid, otherwise, we'd
       // need to adjust the error, as the absolute error would increase,
       // relatively, by (1 + e)^exp.numerator if nroot was done before the pow.
@@ -104,11 +104,11 @@ sealed abstract class Rational extends ScalaNumber with ScalaNumericConversions 
         (Rational(n_._1, d_._2), Rational(n_._2, d_._1))
       }
     }
-    
+
     if (low == high) {
       low
     } else {
-    
+
       import Rational.{ nroot => intNroot }
 
       // To ensure the initial approximation is within (relatively) 1/n of the
@@ -141,7 +141,7 @@ sealed abstract class Rational extends ScalaNumber with ScalaNumericConversions 
       //        < x(oo)[1 + e(k) * (1 - 1 / (1 + 1/n)^(n-1))]
       // Let e = (1 + 1/n)^(n-1).
       //        < x(oo)[1 + e(k) * (e - 1 / e)]
-      //          
+      //
       // So, we use a = (e - 1) / e as the relative error multiplier.
 
       val e = Rational(k + 1, k) pow (k - 1)
@@ -151,7 +151,7 @@ sealed abstract class Rational extends ScalaNumber with ScalaNumericConversions 
 
       // absErr * a^k < error => a^k = error / absErr => k = log(error / absErr) / log(a)
       val maxiters = math.ceil(math.log((error / absErr).toDouble) / math.log(a.toDouble)).toInt
-      
+
       // A single step of the nth-root algorithm.
       @inline def refine(x: Rational) = (x * (k - 1) + this / (x pow (k - 1))) / k
 
@@ -159,7 +159,7 @@ sealed abstract class Rational extends ScalaNumber with ScalaNumericConversions 
         prev
       } else {
         val next = refine(prev)
-        
+
         // We know x(e0 - e1) > (1 - a)xe0, so xe0 < x(e0 - e1) / (1 - a).
         // Thus, if we have the difference, we can recalculate our guess of the
         // absolute error more "accurately" by dividing the difference of the
@@ -257,7 +257,7 @@ sealed abstract class Rational extends ScalaNumber with ScalaNumericConversions 
     @tailrec
     def closest(l: Rational, u: Rational): Rational = {
       val mediant = Rational(l.numerator + u.numerator, l.denominator + u.denominator)
-    
+
       if (mediant.denominator > limit) {
         if ((this - l).abs > (u - this).abs) u else l
       } else if (mediant == this) {
@@ -287,7 +287,7 @@ object Rational extends RationalInstances {
 
   val zero: Rational = LongRational(0L, 1L)
   val one: Rational = LongRational(1L, 1L)
-  
+
   def apply(n: SafeLong, d: SafeLong): Rational = {
     if (d < 0) return apply(-n, -d)
     val g = n gcd d
@@ -336,7 +336,7 @@ object Rational extends RationalInstances {
     case RationalString(n, d) => Rational(BigInt(n), BigInt(d))
     case IntegerString(n) => Rational(BigInt(n))
     case s => try {
-      Rational(BigDecimal(s))
+      Rational(BigDecimal(s.toString))
     } catch {
       case nfe: NumberFormatException => throw new NumberFormatException("For input string: " + s)
     }
@@ -422,7 +422,7 @@ private[math] abstract class Rationals[@specialized(Long) A](implicit integral: 
   sealed trait RationalLike extends Rational {
     def num: A
     def den: A
-    
+
     override def signum: Int = scala.math.signum(integral.compare(num, zero))
 
     def isWhole: Boolean = den == one
@@ -452,7 +452,7 @@ private[math] abstract class Rationals[@specialized(Long) A](implicit integral: 
 
       val nShared = n >> (n.bitLength - sharedLength)
       val dShared = d >> dLowerLength
-    
+
       d.underlying.getLowestSetBit() < dLowerLength
       val addBit = if (nShared < dShared || (nShared == dShared && d.underlying.getLowestSetBit() < dLowerLength)) {
         1
@@ -467,7 +467,7 @@ private[math] abstract class Rationals[@specialized(Long) A](implicit integral: 
       val bits = (m | ((1023L - e) << 52))
       java.lang.Double.longBitsToDouble(bits)
     }
-      
+
 
     override def hashCode: Int =
       if (isWhole && toBigInt == toLong) unifiedPrimitiveHashcode
