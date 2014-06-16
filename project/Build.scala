@@ -50,7 +50,11 @@ object MyBuild extends Build {
   override lazy val settings = super.settings ++ Seq(
     organization := "org.spire-math",
 
-    scalaVersion := "2.10.2",
+    scalaVersion := "2.11.1",
+
+    resolvers += Resolver.sonatypeRepo("snapshots"),
+    libraryDependencies += "org.scala-miniboxing.plugins" %% 
+                           "miniboxing-runtime" % "0.3-SNAPSHOT",
 
     crossScalaVersions := Seq("2.10.2", "2.11.1"),
 
@@ -134,6 +138,10 @@ object MyBuild extends Build {
 
   // Main
 
+  val minibox = Seq(
+    scalacOptions ++= Seq("-P:minibox:hijack", "-optimize", "-Xplugin:./lib/miniboxing-plugin_2.11-0.3-SNAPSHOT.jar")
+  )
+
   lazy val spire = Project("spire", file(".")).
     aggregate(macros, core, examples, scalacheckBinding, tests, benchmark).
     settings(spireSettings: _*)
@@ -191,7 +199,7 @@ object MyBuild extends Build {
       scalaCheck % "test",
       scalaTest % "test"
     )
-  ) ++ buildInfoSettings ++ Seq(
+  ) ++ buildInfoSettings ++ minibox ++ Seq(
     sourceGenerators in Compile <+= buildInfo,
     buildInfoKeys := Seq[BuildInfoKey](version, scalaVersion),
     buildInfoPackage := "spire"
@@ -210,7 +218,7 @@ object MyBuild extends Build {
       "org.apfloat" % "apfloat" % "1.6.3",
       "org.jscience" % "jscience" % "4.3.1"
     )
-  ) ++ noPublish
+  ) ++ noPublish ++ minibox
 
   // Scalacheck binding
 
@@ -224,7 +232,7 @@ object MyBuild extends Build {
       "org.typelevel" %% "discipline" % "0.2.1",
       scalaCheck
     )
-  )
+  ) ++ minibox
 
   // Tests
 
@@ -237,7 +245,7 @@ object MyBuild extends Build {
     libraryDependencies ++= Seq(
       scalaTest % "test"
     )
-  ) ++ noPublish
+  ) ++ noPublish ++ minibox
 
 
   // Benchmark
@@ -272,6 +280,6 @@ object MyBuild extends Build {
 
     // enable forking in run
     fork in run := true
-  ) ++ noPublish
+  ) ++ noPublish ++ minibox
 
 }
