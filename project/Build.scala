@@ -74,8 +74,7 @@ object MyBuild extends Build {
       "-language:experimental.macros",
       "-language:higherKinds",
       "-language:implicitConversions",
-      "-feature",
-      "-Ydebug"
+      "-feature"
     ),
 
     resolvers += Resolver.sonatypeRepo("snapshots"),

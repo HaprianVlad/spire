@@ -260,41 +260,41 @@ trait Polynomial[@spec(Double) C] { lhs =>
   def :* (k: C)(implicit ring: Semiring[C], eq: Eq[C]): Polynomial[C] = k *: lhs
   def :/ (k: C)(implicit field: Field[C], eq: Eq[C]): Polynomial[C] = this :* k.reciprocal
 
-  override def equals(that: Any): Boolean = that match {
-    case rhs: Polynomial[_] if lhs.degree == rhs.degree =>
-      val (les, lcs) = Polynomial.split(lhs)
-      val (res, rcs) = Polynomial.split[Any](rhs.asInstanceOf[Polynomial[Any]])
+  // override def equals(that: Any): Boolean = that match {
+  //   case rhs: Polynomial[_] if lhs.degree == rhs.degree =>
+  //     val (les, lcs) = Polynomial.split(lhs)
+  //     val (res, rcs) = Polynomial.split[Any](rhs.asInstanceOf[Polynomial[Any]])
 
-      @tailrec
-      def loop(i: Int, j: Int): Boolean = {
-        if (i >= les.length && j >= res.length) {
-          true
-        } else if (j >= res.length || les(i) < res(j)) {
-          if (lcs(i) == 0) loop(i + 1, j) else false
-        } else if (i >= les.length || les(i) > res(j)) {
-          if (rcs(j) == 0) loop(i, j + 1) else false
-        } else if (lcs(i) == rcs(j)) {
-          loop(i + 1, j + 1)
-        } else {
-          false
-        }
-      }
+  //     @tailrec
+  //     def loop(i: Int, j: Int): Boolean = {
+  //       if (i >= les.length && j >= res.length) {
+  //         true
+  //       } else if (j >= res.length || les(i) < res(j)) {
+  //         if (lcs(i) == 0) loop(i + 1, j) else false
+  //       } else if (i >= les.length || les(i) > res(j)) {
+  //         if (rcs(j) == 0) loop(i, j + 1) else false
+  //       } else if (lcs(i) == rcs(j)) {
+  //         loop(i + 1, j + 1)
+  //       } else {
+  //         false
+  //       }
+  //     }
 
-      loop(0, 0)
+  //     loop(0, 0)
 
-    case rhs: Polynomial[_] =>
-      false
+  //   case rhs: Polynomial[_] =>
+  //     false
 
-    case n if lhs.isZero =>
-      n == 0
+  //   case n if lhs.isZero =>
+  //     n == 0
 
-    case n if lhs.degree == 0 =>
-      val (_, lcs) = Polynomial.split(lhs)
-      lcs(0) == n
+  //   case n if lhs.degree == 0 =>
+  //     val (_, lcs) = Polynomial.split(lhs)
+  //     lcs(0) == n
 
-    case _ =>
-      false
-  }
+  //   case _ =>
+  //     false
+  // }
 
   override def toString =
     if (isZero) {
