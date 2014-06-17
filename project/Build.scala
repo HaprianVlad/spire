@@ -140,9 +140,10 @@ object MyBuild extends Build {
     resolvers += Resolver.sonatypeRepo("snapshots"),
     libraryDependencies += "org.scala-miniboxing.plugins" %% "miniboxing-runtime" % "0.3-SNAPSHOT",
     addCompilerPlugin("org.scala-miniboxing.plugins" %% "miniboxing-plugin" % "0.3-SNAPSHOT"),
+    //scalacOptions += "-Xplugin:./lib/miniboxing-plugin_2.11-0.3-SNAPSHOT.jar" // locally
     scalacOptions ++= (
-      // "-P:minibox:log" ::    // enable the miniboxing plugin output
-      //                        // (which explains what the plugin is doing)
+      "-P:minibox:log" ::    // enable the miniboxing plugin output
+                             // (which explains what the plugin is doing)
       "-P:minibox:hijack" :: // enable hijacking the @specialized annotations
                              // transforming them into @miniboxed annotations
       "-P:minibox:two-way" ::// translate to {generic, Long, Double} instead of
