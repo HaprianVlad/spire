@@ -106,10 +106,10 @@ object MyBuild extends Build {
     publishTo <<= version {
       (v: String) =>
       val nexus = "https://oss.sonatype.org/"
-      if (v.trim.endsWith("SNAPSHOT")) 
-        Some("snapshots" at nexus + "content/repositories/snapshots") 
+      if (v.trim.endsWith("SNAPSHOT"))
+        Some("snapshots" at nexus + "content/repositories/snapshots")
       else
-        Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+        Some("releases" at nexus + "service/local/staging/deploy/maven2")
     },
 
     pomExtra := (
@@ -242,6 +242,23 @@ object MyBuild extends Build {
 
   // Benchmark
 
+  /** Settings for the miniboxing plugin */
+  lazy val miniboxingSettings = Seq[Setting[_]](
+    resolvers += Resolver.sonatypeRepo("snapshots"),
+    libraryDependencies += "org.scala-miniboxing.plugins" %% "miniboxing-runtime" % "0.3-SNAPSHOT",
+    addCompilerPlugin("org.scala-miniboxing.plugins" %% "miniboxing-plugin" % "0.3-SNAPSHOT"),
+    scalacOptions ++= (
+      //"-P:minibox:log" ::    // enable the miniboxing plugin output
+      //                       // (which explains what the plugin is doing)
+      "-P:minibox:hijack" :: // enable hijacking the @specialized annotations
+                             // transforming them into @miniboxed annotations
+      "-optimize" ::         // necessary to get the best performance when
+                             // using the miniboxing plugin
+      Nil
+    )
+  )
+
+
   lazy val benchmark: Project = Project("benchmark", file("benchmark")).
     settings(benchmarkSettings: _*).
     dependsOn(core)
@@ -272,6 +289,6 @@ object MyBuild extends Build {
 
     // enable forking in run
     fork in run := true
-  ) ++ noPublish
+  ) ++ noPublish ++ miniboxingSettings
 
 }

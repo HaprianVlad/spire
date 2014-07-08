@@ -199,3 +199,4 @@ object ProductTypes {
 
   def algebraProductTypes: String = renderAll("spire.std", "spire.algebra._" :: Nil, 2, 22)(algebra)
 }
+
