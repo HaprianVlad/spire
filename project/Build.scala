@@ -50,7 +50,7 @@ object MyBuild extends Build {
   override lazy val settings = super.settings ++ Seq(
     organization := "org.spire-math",
 
-    scalaVersion := "2.10.2",
+    scalaVersion := "2.11.1",
 
     crossScalaVersions := Seq("2.10.2", "2.11.1"),
 
